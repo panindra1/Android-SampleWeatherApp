@@ -92,7 +92,7 @@ public class ForecastFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 FetchWeatherTask aynctask = new FetchWeatherTask();
-                aynctask.execute("61820");
+                aynctask.execute("94043");
                 return true;
 
             default:
@@ -156,6 +156,7 @@ public class ForecastFragment extends Fragment {
                 if (buffer.length() == 0) {
                     // Stream was empty.  No point in parsing.
                     forecastJsonStr = null;
+                    return null;
                 }
                 forecastJsonStr = buffer.toString();
                 Log.v(LOG_TAG, forecastJsonStr);
