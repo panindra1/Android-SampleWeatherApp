@@ -1,5 +1,7 @@
 package com.example.panindra.sunshine;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +51,7 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ArrayList<String> weekForecast = new ArrayList<String>();
+        final ArrayList<String> weekForecast = new ArrayList<String>();
         weekForecast.add("Today-Sunny-88/63");
         weekForecast.add("Tomorrow-Cloudy-48/63");
         weekForecast.add("Wed-Rain-28/63");
@@ -57,6 +61,22 @@ public class ForecastFragment extends Fragment {
         mForecastAdappter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
         ListView listView = (ListView) rootView.findViewById(R.id.listView_forecast);
         listView.setAdapter(mForecastAdappter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String forecast = mForecastAdappter.getItem(i);
+                Intent detailsIntent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(detailsIntent);
+
+               /* CharSequence text = mForecastAdappter.getItem(i);
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(getActivity(), text, duration);
+                toast.show();*/
+            }
+        });
 
         return rootView;
     }
@@ -72,7 +92,7 @@ public class ForecastFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 FetchWeatherTask aynctask = new FetchWeatherTask();
-                aynctask.execute("94043");
+                aynctask.execute("61820");
                 return true;
 
             default:
