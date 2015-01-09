@@ -32,7 +32,7 @@ import java.util.Date;
  * Created by panindra on 1/7/15.
  */
 public class ForecastFragment extends Fragment {
-    private ArrayAdapter<String> mForecastAdappter;
+    public static ArrayAdapter<String> mForecastAdappter;
     public ForecastFragment() {
     }
 
@@ -80,11 +80,10 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
+    public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-
         @Override
-        protected Void doInBackground(String...params) {
+        protected String[] doInBackground(String...params) {
 
             if(params.length == 0) {
                 return null;
@@ -140,6 +139,7 @@ public class ForecastFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
                 Log.v(LOG_TAG, forecastJsonStr);
+
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -153,11 +153,26 @@ public class ForecastFragment extends Fragment {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("PlaceholderFragment", "Error closing stream", e);
+                        Log.e("ForecastFragment", "Error closing stream", e);
                     }
                 }
             }
-        return null;
+
+            try {
+                return getWeatherDataFromJson(forecastJsonStr, 7);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+            ForecastFragment.mForecastAdappter.clear();
+            for(String forcast : strings) {
+                ForecastFragment.mForecastAdappter.add(forcast);
+            }
         }
 
 
