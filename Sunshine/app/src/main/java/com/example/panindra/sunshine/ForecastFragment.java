@@ -2,9 +2,11 @@ package com.example.panindra.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,13 +93,25 @@ public class ForecastFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                FetchWeatherTask aynctask = new FetchWeatherTask();
-                aynctask.execute("94043");
+                updateWeather();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void updateWeather() {
+        FetchWeatherTask aynctask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        aynctask.execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
