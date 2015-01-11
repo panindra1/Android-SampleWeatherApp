@@ -13,8 +13,6 @@ import android.widget.ShareActionProvider;
 
 
 public class MainActivity extends ActionBarActivity {
-    private ShareActionProvider mShareActionProvider;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +25,36 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Log.v("MainActivity", "OnStart()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v("MainActivity", "onResume()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v("MainActivity", "OnPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("MainActivity", "OnPause()");
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
     }
-
 
 
     @Override
